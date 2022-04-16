@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import Pagination from "../../utils/Pagination";
 import Passenger from "./Passenger";
 import { fatchPassenger } from "./../../store/PassengerSlice";
 import { ApiUrl } from "../../config";
+import usePagination from "./../../hooks/usePagination";
 
 function PassengerList() {
   const [page, setPage] = useState(0);
-  const pageNumbers = [0, 1, 2, 3];
+  const pageNumbers = usePagination(page);
 
   const { showPassenger } = useSelector((state) => state.passengers);
 
   const dispatch = useDispatch();
+  //   console.log("hello");
 
   const changePage = (pageNumber) => {
     setPage(pageNumber);

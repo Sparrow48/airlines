@@ -4,7 +4,6 @@ import axios from "axios";
 export const fatchPassenger = createAsyncThunk(
   "passengers/passenger",
   async ({ ApiUrl, page }) => {
-    console.log("page Number: ", page);
     const { data } = await axios.get(
       `${ApiUrl}/passenger?page=${page}&size=10`
     );
