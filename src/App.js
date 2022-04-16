@@ -7,7 +7,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/airlinesDetails" element={<AirlinesDetails />} />
+        <Route path="/airlinesDetails/:id" element={<AirlinesDetails />} />
       </Routes>
     </div>
   );
