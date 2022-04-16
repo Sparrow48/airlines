@@ -3,6 +3,7 @@ import HomePage from "./component/HomePage";
 import AirlinesDetails from "./component/AirlinesDetails";
 import Nav from "./component/Nav/Nav";
 import Registration from "./component/Registration";
+import PassengerList from "./component/Passenger/PassengerList";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/airlinesDetails/:id" element={<AirlinesDetails />} />
         <Route path="/register" element={<Registration />} />
+        <Route path="/allPassenger" element={<PassengerList />} />
       </Routes>
     </div>
   );
