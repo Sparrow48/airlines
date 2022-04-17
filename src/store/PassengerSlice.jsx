@@ -9,10 +9,20 @@ export const fatchPassenger = createAsyncThunk(
   }
 );
 
+export const passengerProfile = createAsyncThunk(
+  "passengers/profile",
+  async ({ ApiUrl, id }) => {
+    const { data } = await axios.get(`${ApiUrl}/passenger/${id}`);
+    console.log("data", data);
+    return data;
+  }
+);
+
 const PassengerSlice = createSlice({
   name: "passengers",
   initialState: {
     passengers: [],
+    profile: {},
     showPassenger: false,
   },
   reducers: {},
@@ -24,6 +34,10 @@ const PassengerSlice = createSlice({
     [fatchPassenger.rejected]: (state, action) => {
       state.showPassenger = false;
     },
+    [passengerProfile.fulfilled]: (state, action) => {
+      state.profile = action.payload;
+    },
+    [passengerProfile.rejected]: (state, action) => {},
   },
 });
 

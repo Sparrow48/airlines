@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 function Passenger() {
   const { passengers } = useSelector((state) => state.passengers);
@@ -8,18 +9,18 @@ function Passenger() {
     <div>
       {passengers.map((passenger) => (
         <div className="pb-3 ">
-          <div class="p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-md ">
+            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               {passenger.name}
             </h5>
 
-            <a
-              href="/"
-              class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-400 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            <NavLink
+              to={`/passengerProfile/${passenger._id}`}
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-400 rounded-lg hover:bg-blue-800 "
             >
               Read more
               <svg
-                class="ml-2 -mr-1 w-4 h-4"
+                className="w-4 h-4 ml-2 -mr-1"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +31,7 @@ function Passenger() {
                   clip-rule="evenodd"
                 ></path>
               </svg>
-            </a>
+            </NavLink>
           </div>
         </div>
       ))}
