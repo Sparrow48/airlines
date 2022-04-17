@@ -14,6 +14,7 @@ function App() {
         <Route path="/airlinesDetails/:id" element={<AirlinesDetails />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/allPassenger" element={<PassengerList />} />
+        <Route path="/passengerProfile" element={<PassengerList />} />
       </Routes>
     </div>
   );

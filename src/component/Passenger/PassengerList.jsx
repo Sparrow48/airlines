@@ -36,7 +36,7 @@ function PassengerList() {
           </div>
           <div>
             <button
-              className="px-2 py-1 text-white bg-blue-600 rounded "
+              className="px-2 py-1 text-white bg-blue-700 rounded "
               onClick={changePage}
             >
               see more
