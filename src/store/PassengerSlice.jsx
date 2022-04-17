@@ -4,9 +4,7 @@ import axios from "axios";
 export const fatchPassenger = createAsyncThunk(
   "passengers/passenger",
   async ({ ApiUrl, page }) => {
-    const { data } = await axios.get(
-      `${ApiUrl}/passenger?page=${page}&size=10`
-    );
+    const { data } = await axios.get(`${ApiUrl}/passenger?page=${page}&size=5`);
     return data.data;
   }
 );
@@ -20,7 +18,6 @@ const PassengerSlice = createSlice({
   reducers: {},
   extraReducers: {
     [fatchPassenger.fulfilled]: (state, action) => {
-      state.passengers = [];
       state.passengers.push(...action.payload);
       state.showPassenger = true;
     },

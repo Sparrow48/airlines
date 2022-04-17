@@ -3,19 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import Passenger from "./Passenger";
 import { fatchPassenger } from "./../../store/PassengerSlice";
 import { ApiUrl } from "../../config";
-import usePagination from "./../../hooks/usePagination";
+// import usePagination from "./../../hooks/usePagination";
 
 function PassengerList() {
   const [page, setPage] = useState(0);
-  const pageNumbers = usePagination(page);
-
+  // const pageNumbers = usePagination(page);
   const { showPassenger } = useSelector((state) => state.passengers);
 
   const dispatch = useDispatch();
-  //   console.log("hello");
 
-  const changePage = (pageNumber) => {
-    setPage(pageNumber);
+  // const changePage = (pageNumber) => {
+  //   setPage(pageNumber);
+  // };
+
+  const changePage = () => {
+    setPage(page + 1);
   };
 
   useEffect(() => {
@@ -28,9 +30,20 @@ function PassengerList() {
   return (
     <>
       {showPassenger ? (
-        <div className="m-12 ">
-          <Passenger />
+        <div className="flex flex-col items-center justify-center m-12 space-y-7 ">
           <div>
+            <Passenger />
+          </div>
+          <div>
+            <button
+              className="px-2 py-1 text-white bg-blue-600 rounded "
+              onClick={changePage}
+            >
+              see more
+            </button>
+          </div>
+
+          {/* <div>
             <div className="flex space-x-2 ">
               {pageNumbers.map((page) => (
                 <button
@@ -41,7 +54,7 @@ function PassengerList() {
                 </button>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       ) : (
         <h1> Loading... </h1>
