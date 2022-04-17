@@ -7,15 +7,20 @@ import usePagination from "./../../hooks/usePagination";
 
 function PassengerList() {
   const [page, setPage] = useState(0);
-  const pageNumbers = usePagination(page);
-
+  const [activePage, setActivePage] = useState(0);
+  const pageNumbers = usePagination(activePage, page);
   const { showPassenger } = useSelector((state) => state.passengers);
 
   const dispatch = useDispatch();
-  //   console.log("hello");
 
-  const changePage = (pageNumber) => {
-    setPage(pageNumber);
+  const changePageNumber = (pageNumber) => {
+    setActivePage(pageNumber);
+  };
+
+  const changePage = () => {
+    const updatePage = page + 1;
+    setPage(updatePage);
+    setActivePage(updatePage);
   };
 
   useEffect(() => {
@@ -28,14 +33,30 @@ function PassengerList() {
   return (
     <>
       {showPassenger ? (
-        <div className="m-12 ">
-          <Passenger />
+        <div className="flex flex-col items-center justify-center m-12 space-y-7 ">
+          <div>
+            <Passenger page={activePage + 1} />
+          </div>
+          <div>
+            <button
+              className="px-2 py-1 text-white bg-blue-700 rounded hover:bg-blue-500 "
+              onClick={changePage}
+            >
+              see more
+            </button>
+          </div>
           <div>
             <div className="flex space-x-2 ">
               {pageNumbers.map((page) => (
                 <button
-                  onClick={() => changePage(page)}
-                  className="px-2 py-1 rounded bg-slate-300"
+                  key={page}
+                  onClick={() => changePageNumber(page)}
+                  className={
+                    activePage === page
+                      ? "px-2 py-1 rounded bg-green-300"
+                      : "px-2 py-1 rounded bg-slate-300"
+                  }
+                  // className="px-2 py-1 rounded bg-slate-300"
                 >
                   {page}
                 </button>

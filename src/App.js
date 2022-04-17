@@ -4,6 +4,7 @@ import AirlinesDetails from "./component/AirlinesDetails";
 import Nav from "./component/Nav/Nav";
 import Registration from "./component/Registration";
 import PassengerList from "./component/Passenger/PassengerList";
+import PassengerProfile from "./component/Passenger/PassengerProfile";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/airlinesDetails/:id" element={<AirlinesDetails />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/allPassenger" element={<PassengerList />} />
+        <Route path="/passengerProfile/:id" element={<PassengerProfile />} />
       </Routes>
     </div>
   );
