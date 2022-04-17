@@ -51,7 +51,12 @@ function PassengerList() {
                 <button
                   key={page}
                   onClick={() => changePageNumber(page)}
-                  className="px-2 py-1 rounded bg-slate-300"
+                  className={
+                    activePage === page
+                      ? "px-2 py-1 rounded bg-green-300"
+                      : "px-2 py-1 rounded bg-slate-300"
+                  }
+                  // className="px-2 py-1 rounded bg-slate-300"
                 >
                   {page}
                 </button>

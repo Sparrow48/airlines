@@ -1,9 +1,8 @@
 function usePagination(activePage, page) {
   const pageNumbers = [];
 
-  let startNum = activePage < 6 ? 0 : activePage - 5;
-  let length =
-    activePage < 6 ? page : activePage + 5 > page ? page : activePage + 5;
+  let startNum = activePage - 2 < 0 ? 0 : activePage - 2;
+  let length = activePage + 2 > page ? page : activePage + 2;
 
   for (let i = startNum; i <= length; i++) {
     pageNumbers.push(i);

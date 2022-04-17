@@ -11,10 +11,23 @@ export const fatchPassenger = createAsyncThunk(
 
 export const passengerProfile = createAsyncThunk(
   "passengers/profile",
-  async ({ ApiUrl, id }) => {
+  async ({ ApiUrl, id }, { rejectWithValue }) => {
     const { data } = await axios.get(`${ApiUrl}/passenger/${id}`);
     console.log("data", data);
+
+    if (!data) {
+      return rejectWithValue(" Passenger Profile Nor Found !!!");
+    }
     return data;
+  }
+);
+
+export const deleteProfile = createAsyncThunk(
+  "passengers/deleteProfile",
+  async ({ ApiUrl, id }) => {
+    const res = await axios.delete(`${ApiUrl}/passenger/${id}`);
+
+    return res.data;
   }
 );
 
@@ -24,6 +37,7 @@ const PassengerSlice = createSlice({
     passengers: [],
     profile: {},
     showPassenger: false,
+    message: "",
   },
   reducers: {},
   extraReducers: {
@@ -37,7 +51,13 @@ const PassengerSlice = createSlice({
     [passengerProfile.fulfilled]: (state, action) => {
       state.profile = action.payload;
     },
-    [passengerProfile.rejected]: (state, action) => {},
+    [passengerProfile.rejected]: (state, action) => {
+      state.message = action.payload;
+    },
+    [deleteProfile.fulfilled]: (state, action) => {
+      state.message = action.payload;
+    },
+    [deleteProfile.rejected]: (state, action) => {},
   },
 });
 

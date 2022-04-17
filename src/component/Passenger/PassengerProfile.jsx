@@ -1,17 +1,22 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { passengerProfile } from "./../../store/PassengerSlice";
+import { NavLink, useParams } from "react-router-dom";
+import { passengerProfile, deleteProfile } from "./../../store/PassengerSlice";
 import { ApiUrl } from "../../config";
 import profileImage from "./../../asset/profile.png";
 
 function PassengerProfile() {
-  const { profile } = useSelector((state) => state.passengers);
-
+  const { profile, message } = useSelector((state) => state.passengers);
   const param = useParams();
   const dispatch = useDispatch();
 
-  console.log(param.id);
+  const deleteProfileById = () => {
+    try {
+      dispatch(deleteProfile({ ApiUrl, id: param.id }));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     try {
@@ -22,85 +27,55 @@ function PassengerProfile() {
   }, []);
   return (
     <div>
-      <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-        {/* <div className="flex justify-end px-4 pt-4">
-          <button
-            id="dropdownButton"
-            data-dropdown-toggle="dropdown"
-            className="hidden sm:inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5"
-            type="button"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-            </svg>
-          </button>
-          
-          <div
-            id="dropdown"
-            className="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700"
-          >
-            <ul className="py-1" aria-labelledby="dropdownButton">
-              <li>
-                <a
-                  href="/"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Edit
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Export Data
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/"
-                  className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Delete
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div> */}
-        <div className="flex flex-col items-center pb-10">
-          <img
-            className="w-24 h-24 mb-3 rounded-full shadow-lg"
-            src={profileImage}
-            alt="profile_image"
-          />
+      {profile.length ? (
+        <>
+          {" "}
+          <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+            <div className="flex flex-col items-center pb-10">
+              <img
+                className="w-24 h-24 mb-3 rounded-full shadow-lg"
+                src={profileImage}
+                alt="profile_image"
+              />
 
-          <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-            {profile.name}
-          </h5>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            Visual Designer
-          </span>
-          <div className="flex mt-4 space-x-3 lg:mt-6">
-            <a
-              href="/"
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Add friend
-            </a>
-            <a
-              href="/"
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700"
-            >
-              Message
-            </a>
+              <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                {profile.name}
+              </h5>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Visual Designer
+              </span>
+              <div className="flex mt-4 space-x-3 lg:mt-6">
+                <button
+                  onClick={deleteProfileById}
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 "
+                >
+                  Delete Profile
+                </button>
+                <a
+                  href="/"
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 "
+                >
+                  Edit info
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <>
+          <div className="flex flex-col items-center justify-center h-screen space-y-3 ">
+            <h1 className="p-2 text-xl text-white bg-red-200 rounded">
+              {message}
+            </h1>
+            <NavLink
+              className="px-2 py-1 bg-gray-300 rounded  hover:bg-gray-500"
+              to="/allPassenger"
+            >
+              Go Back
+            </NavLink>
+          </div>
+        </>
+      )}
     </div>
   );
 }
