@@ -1,14 +1,16 @@
-function usePagination(activePage, page) {
+function usePagination(activePage, size) {
   const pageNumbers = [];
+  const maxPage = Math.ceil(size / 5);
+  let endNum = Math.min(maxPage, activePage + 3);
 
-  let startNum = activePage - 2 < 0 ? 0 : activePage - 2;
-  let length = activePage + 2 > page ? page : activePage + 2;
-
-  for (let i = startNum; i <= length; i++) {
+  let startNum = Math.max(endNum - 5, 0);
+  endNum += 5 - (endNum - startNum);
+  endNum = Math.min(endNum, maxPage);
+  for (let i = startNum; i < endNum; i++) {
     pageNumbers.push(i);
   }
 
-  return pageNumbers;
+  return { pageNumbers, maxPage: maxPage - 1, end: endNum - 1 };
 }
 
 export default usePagination;

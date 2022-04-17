@@ -34,12 +34,30 @@ export const deleteProfile = createAsyncThunk(
 const PassengerSlice = createSlice({
   name: "passengers",
   initialState: {
+    page: 0,
+    activePage: 0,
     passengers: [],
     profile: {},
+    showProfile: false,
     showPassenger: false,
     message: "",
+    profileLoading: true,
   },
-  reducers: {},
+  reducers: {
+    resetPassengers(state, _) {
+      state.passengers = [];
+    },
+    incrementPage(state, _) {
+      state.page += 1;
+    },
+    activePageHandler(state, action) {
+      state.activePage = action.payload;
+    },
+    resetFlag(state) {
+      state.showProfile = false;
+      state.profileLoading = true;
+    },
+  },
   extraReducers: {
     [fatchPassenger.fulfilled]: (state, action) => {
       state.passengers.push(...action.payload);
@@ -50,16 +68,20 @@ const PassengerSlice = createSlice({
     },
     [passengerProfile.fulfilled]: (state, action) => {
       state.profile = action.payload;
+      state.showProfile = true;
     },
     [passengerProfile.rejected]: (state, action) => {
       state.message = action.payload;
+      state.profileLoading = false;
     },
     [deleteProfile.fulfilled]: (state, action) => {
-      state.message = action.payload;
+      state.message = action.payload.message;
+      state.showProfile = false;
+      state.profileLoading = false;
     },
     [deleteProfile.rejected]: (state, action) => {},
   },
 });
 
-export const airlineActions = PassengerSlice.actions;
+export const PassengerActions = PassengerSlice.actions;
 export default PassengerSlice;
