@@ -51,6 +51,18 @@ export const deleteProfile = createAsyncThunk(
   }
 );
 
+export const editName = createAsyncThunk(
+  "passengers/editName",
+  async ({ ApiUrl, reqConfiq }) => {
+    const res = await axios.patch(`${ApiUrl}/passenger/${reqConfiq.id}`, {
+      name: reqConfiq.name,
+    });
+
+    console.log(res);
+    return res.data;
+  }
+);
+
 const PassengerSlice = createSlice({
   name: "passengers",
   initialState: {

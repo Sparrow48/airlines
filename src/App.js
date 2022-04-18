@@ -5,6 +5,7 @@ import Nav from "./component/Nav/Nav";
 import Registration from "./component/Registration";
 import PassengerList from "./component/Passenger/PassengerList";
 import PassengerProfile from "./component/Passenger/PassengerProfile";
+import EditName from "./component/Passenger/EditName";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/register" element={<Registration />} />
         <Route path="/allPassenger" element={<PassengerList />} />
         <Route path="/passengerProfile/:id" element={<PassengerProfile />} />
+        <Route path="/editName/:id" element={<EditName />} />
       </Routes>
     </div>
   );

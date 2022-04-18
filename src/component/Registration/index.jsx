@@ -21,8 +21,6 @@ function Index() {
     setAirId(event.target.value);
   };
 
-  console.log(name);
-
   const nameHandler = debounce(fullName, 500);
   const tripHandler = debounce(tripNumber, 500);
   const airIdHandler = debounce(airlineId, 500);
