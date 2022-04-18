@@ -22,6 +22,26 @@ export const passengerProfile = createAsyncThunk(
   }
 );
 
+export const resgisterPassenger = createAsyncThunk(
+  "passengers/registerPassenger",
+
+  async ({ ApiUrl, reqConfig }, { rejectWithValue }) => {
+    try {
+      console.log("post");
+      const response = await axios.post(`${ApiUrl}/passenger`, {
+        name: reqConfig.name,
+        trips: reqConfig.trip,
+        airline: reqConfig.airId,
+      });
+      console.log(response.data._id);
+
+      return response.data._id;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const deleteProfile = createAsyncThunk(
   "passengers/deleteProfile",
   async ({ ApiUrl, id }) => {
@@ -42,6 +62,7 @@ const PassengerSlice = createSlice({
     showPassenger: false,
     message: "",
     profileLoading: true,
+    regId: 0,
   },
   reducers: {
     resetPassengers(state, _) {
@@ -74,6 +95,11 @@ const PassengerSlice = createSlice({
       state.message = action.payload;
       state.profileLoading = false;
     },
+    [resgisterPassenger.fulfilled]: (state, action) => {
+      state.regId = action.payload;
+    },
+    [resgisterPassenger.rejected]: (state, action) => {},
+
     [deleteProfile.fulfilled]: (state, action) => {
       state.message = action.payload.message;
       state.showProfile = false;
