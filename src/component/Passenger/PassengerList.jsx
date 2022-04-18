@@ -2,51 +2,89 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Passenger from "./Passenger";
 import { fatchPassenger } from "./../../store/PassengerSlice";
+import { PassengerActions } from "./../../store/PassengerSlice";
 import { ApiUrl } from "../../config";
 import usePagination from "./../../hooks/usePagination";
 
 function PassengerList() {
-  const [page, setPage] = useState(0);
-  const [activePage, setActivePage] = useState(0);
-  const pageNumbers = usePagination(activePage, page);
-  const { showPassenger } = useSelector((state) => state.passengers);
+  const [disable, setDisable] = useState(false);
+  const { passengers, showPassenger, page, activePage } = useSelector(
+    (state) => state.passengers
+  );
+  const {
+    pageNumbers,
+    end: endNum,
+    maxPage,
+  } = usePagination(activePage, passengers.length);
+  console.log("endNum", endNum, maxPage);
+  const start = activePage * 5;
+  const end = (activePage + 1) * 5;
 
   const dispatch = useDispatch();
 
   const changePageNumber = (pageNumber) => {
-    setActivePage(pageNumber);
+    dispatch(PassengerActions.activePageHandler(pageNumber));
   };
+
+  console.log("hello");
 
   const changePage = () => {
     const updatePage = page + 1;
-    setPage(updatePage);
-    setActivePage(updatePage);
+    dispatch(PassengerActions.incrementPage());
+    dispatch(PassengerActions.activePageHandler(updatePage));
+    setDisable(false);
   };
 
-  useEffect(() => {
+  const loadMore = async (_page) => {
+    if (_page) setDisable(true);
     try {
-      dispatch(fatchPassenger({ ApiUrl, page }));
+      await dispatch(fatchPassenger({ ApiUrl, page: _page }));
+
+      if (_page) changePage();
     } catch (err) {
       console.log(err);
     }
-  }, [page]);
+  };
+
+  useEffect(() => {
+    if (!page) loadMore(0);
+  }, []);
+
   return (
     <>
       {showPassenger ? (
         <div className="flex flex-col items-center justify-center m-12 space-y-7 ">
           <div>
-            <Passenger page={activePage + 1} />
+            {passengers.slice(start, end).map((passenger) => (
+              <Passenger key={passenger._id} passenger={passenger} />
+            ))}
           </div>
+
           <div>
             <button
-              className="px-2 py-1 text-white bg-blue-700 rounded hover:bg-blue-500 "
-              onClick={changePage}
+              disabled={disable}
+              className="px-2 py-1 text-white bg-blue-700 rounded disabled:opacity-0 hover:bg-blue-500"
+              onClick={() => loadMore(page + 1)}
             >
-              see more
+              Load more
             </button>
           </div>
           <div>
             <div className="flex space-x-2 ">
+              {pageNumbers[0] !== 0 ? (
+                <>
+                  <button
+                    key={page}
+                    onClick={() => changePageNumber(0)}
+                    className={"px-2 py-1 rounded bg-slate-300"}
+                    // className="px-2 py-1 rounded bg-slate-300"
+                  >
+                    0
+                  </button>
+
+                  <p className="pt-2 ">...</p>
+                </>
+              ) : null}
               {pageNumbers.map((page) => (
                 <button
                   key={page}
@@ -61,6 +99,20 @@ function PassengerList() {
                   {page}
                 </button>
               ))}
+
+              {maxPage !== endNum ? (
+                <>
+                  <p className="pt-2 ">...</p>
+                  <button
+                    key={page}
+                    onClick={() => changePageNumber(maxPage)}
+                    className={"px-2 py-1 rounded bg-slate-300"}
+                    // className="px-2 py-1 rounded bg-slate-300"
+                  >
+                    {maxPage}
+                  </button>
+                </>
+              ) : null}
             </div>
           </div>
         </div>

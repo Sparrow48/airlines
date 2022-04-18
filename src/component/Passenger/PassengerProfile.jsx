@@ -1,12 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
-import { passengerProfile, deleteProfile } from "./../../store/PassengerSlice";
+import {
+  passengerProfile,
+  deleteProfile,
+  PassengerActions,
+} from "./../../store/PassengerSlice";
 import { ApiUrl } from "../../config";
 import profileImage from "./../../asset/profile.png";
 
 function PassengerProfile() {
-  const { profile, message } = useSelector((state) => state.passengers);
+  const { profile, message, showProfile, profileLoading } = useSelector(
+    (state) => state.passengers
+  );
   const param = useParams();
   const dispatch = useDispatch();
 
@@ -25,11 +31,17 @@ function PassengerProfile() {
       console.log(err);
     }
   }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch(PassengerActions.resetFlag());
+    };
+  }, []);
+
   return (
     <div>
-      {profile.length ? (
+      {showProfile ? (
         <>
-          {" "}
           <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
             <div className="flex flex-col items-center pb-10">
               <img
@@ -63,17 +75,25 @@ function PassengerProfile() {
         </>
       ) : (
         <>
-          <div className="flex flex-col items-center justify-center h-screen space-y-3 ">
-            <h1 className="p-2 text-xl text-white bg-red-200 rounded">
-              {message}
-            </h1>
-            <NavLink
-              className="px-2 py-1 bg-gray-300 rounded  hover:bg-gray-500"
-              to="/allPassenger"
-            >
-              Go Back
-            </NavLink>
-          </div>
+          {profileLoading ? (
+            <>
+              <h1>Loading...</h1>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-col items-center justify-center h-screen space-y-3 ">
+                <h1 className="p-2 text-xl text-white bg-red-200 rounded">
+                  {message}
+                </h1>
+                <NavLink
+                  className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-500"
+                  to="/allPassenger"
+                >
+                  Go Back
+                </NavLink>
+              </div>
+            </>
+          )}
         </>
       )}
     </div>
