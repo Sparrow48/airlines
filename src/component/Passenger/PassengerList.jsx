@@ -16,7 +16,7 @@ function PassengerList() {
     end: endNum,
     maxPage,
   } = usePagination(activePage, passengers.length);
-  console.log("endNum", endNum, maxPage);
+
   const start = activePage * 5;
   const end = (activePage + 1) * 5;
 
@@ -25,8 +25,6 @@ function PassengerList() {
   const changePageNumber = (pageNumber) => {
     dispatch(PassengerActions.activePageHandler(pageNumber));
   };
-
-  console.log("hello");
 
   const changePage = () => {
     const updatePage = page + 1;
@@ -47,7 +45,9 @@ function PassengerList() {
   };
 
   useEffect(() => {
-    if (!page) loadMore(0);
+    if (!page && !pageNumbers.length) {
+      loadMore(0);
+    }
   }, []);
 
   return (
