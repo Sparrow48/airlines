@@ -10,9 +10,10 @@ import { ApiUrl } from "../../config";
 import profileImage from "./../../asset/profile.png";
 
 function PassengerProfile() {
-  const { profile, message, showProfile, profileLoading } = useSelector(
+  const { profile, message, profileLoading } = useSelector(
     (state) => state.passengers
   );
+
   const param = useParams();
   const dispatch = useDispatch();
 
@@ -26,7 +27,9 @@ function PassengerProfile() {
 
   useEffect(() => {
     try {
-      dispatch(passengerProfile({ ApiUrl, id: param.id }));
+      if (profile._id !== param.id) {
+        dispatch(passengerProfile({ ApiUrl, id: param.id }));
+      }
     } catch (err) {
       console.log(err);
     }
@@ -40,7 +43,7 @@ function PassengerProfile() {
 
   return (
     <div>
-      {showProfile ? (
+      {profile._id ? (
         <>
           <div className=" flex justify-center items-center h-[calc(100vh-20rem)] ">
             <div className="w-1/6 pt-5 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -53,6 +56,9 @@ function PassengerProfile() {
 
                 <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
                   {profile.name}
+                </h5>
+                <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
+                  {profile.trips}
                 </h5>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   Visual Designer

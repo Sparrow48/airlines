@@ -3,12 +3,13 @@ import { useDispatch } from "react-redux";
 import { editName } from "./../../store/PassengerSlice";
 import { ApiUrl } from "./../../config";
 import { debounce } from "../../utils/Debounce";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function EditName() {
   const [name, setName] = useState("");
   const dispatch = useDispatch();
   const param = useParams();
+  const navigate = useNavigate();
 
   const editNameHandler = (event) => {
     setName(event.target.value);
@@ -16,9 +17,9 @@ function EditName() {
 
   const nameHandler = debounce(editNameHandler, 500);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    dispatch(
+    await dispatch(
       editName({
         ApiUrl,
         reqConfiq: {
@@ -27,6 +28,7 @@ function EditName() {
         },
       })
     );
+    navigate(`/passengerProfile/${param.id}`);
   };
   return (
     <form onSubmit={submitHandler}>

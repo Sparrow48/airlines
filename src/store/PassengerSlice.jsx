@@ -13,7 +13,6 @@ export const passengerProfile = createAsyncThunk(
   "passengers/profile",
   async ({ ApiUrl, id }, { rejectWithValue }) => {
     const { data } = await axios.get(`${ApiUrl}/passenger/${id}`);
-    console.log("data", data);
 
     if (!data) {
       return rejectWithValue(" Passenger Profile Nor Found !!!");
@@ -33,7 +32,6 @@ export const resgisterPassenger = createAsyncThunk(
         trips: reqConfig.trip,
         airline: reqConfig.airId,
       });
-      console.log(response.data._id);
 
       return response.data._id;
     } catch (err) {
@@ -47,7 +45,7 @@ export const deleteProfile = createAsyncThunk(
   async ({ ApiUrl, id }) => {
     const res = await axios.delete(`${ApiUrl}/passenger/${id}`);
 
-    return res.data;
+    return { data: res.data, id };
   }
 );
 
@@ -58,8 +56,7 @@ export const editName = createAsyncThunk(
       name: reqConfiq.name,
     });
 
-    console.log(res);
-    return res.data;
+    return { data: res.data, id: reqConfiq.id, name: reqConfiq.name };
   }
 );
 
@@ -70,7 +67,6 @@ const PassengerSlice = createSlice({
     activePage: 0,
     passengers: [],
     profile: {},
-    showProfile: false,
     showPassenger: false,
     message: "",
     profileLoading: true,
@@ -87,7 +83,6 @@ const PassengerSlice = createSlice({
       state.activePage = action.payload;
     },
     resetFlag(state) {
-      state.showProfile = false;
       state.profileLoading = true;
     },
   },
@@ -101,7 +96,6 @@ const PassengerSlice = createSlice({
     },
     [passengerProfile.fulfilled]: (state, action) => {
       state.profile = action.payload;
-      state.showProfile = true;
     },
     [passengerProfile.rejected]: (state, action) => {
       state.message = action.payload;
@@ -113,11 +107,31 @@ const PassengerSlice = createSlice({
     [resgisterPassenger.rejected]: (state, action) => {},
 
     [deleteProfile.fulfilled]: (state, action) => {
-      state.message = action.payload.message;
-      state.showProfile = false;
+      state.message = action.payload.data.message;
       state.profileLoading = false;
+      state.profile = {};
+
+      const _index = state.passengers.findIndex((passenger) => {
+        return passenger._id === action.payload.id;
+      });
+
+      if (_index >= 0) {
+        state.passengers.splice(_index, 1);
+      }
     },
     [deleteProfile.rejected]: (state, action) => {},
+    [editName.fulfilled]: (state, action) => {
+      const _index = state.passengers.findIndex((passenger) => {
+        return passenger._id === action.payload.id;
+      });
+
+      state.profile.name = action.payload.name;
+
+      if (_index >= 0) {
+        state.passengers[_index].name = action.payload.name;
+      }
+    },
+    [editName.rejected]: (state, action) => {},
   },
 });
 
